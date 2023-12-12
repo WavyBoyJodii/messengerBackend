@@ -39,10 +39,11 @@ export const Message = pgTable('message', {
   body: varchar('body', { length: 2500 }).notNull(),
   timestamp: timestamp('timestamp').default(sql`CURRENT_TIMESTAMP`),
   user_id: integer('user_id').references(() => User.id),
+  chat_id: integer('chat_id').references(() => Chat.id),
 });
 
-export const Friends = pgTable(
-  'friends',
+export const Friend = pgTable(
+  'friend',
   {
     user_id1: integer('user_id1').references(() => User.id),
     user_id2: integer('user_id2').references(() => User.id),
@@ -54,3 +55,9 @@ export const Friends = pgTable(
     };
   }
 );
+
+export const Chat = pgTable('chat', {
+  id: serial('id').primaryKey(),
+  user_id1: integer('user_id1').references(() => User.id),
+  user_id2: integer('user_id2').references(() => User.id),
+});
