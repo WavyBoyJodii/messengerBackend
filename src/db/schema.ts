@@ -16,7 +16,7 @@ export const friendStatusEnum = pgEnum('status', [
   'accepted',
   'rejected',
 ]);
-export const user = pgTable(
+export const User = pgTable(
   'user',
   {
     id: serial('id').primaryKey(),
@@ -34,45 +34,45 @@ export const user = pgTable(
   }
 );
 
-export type User = typeof user.$inferSelect;
-export type NewUser = typeof user.$inferInsert;
+export type UserType = typeof User.$inferSelect;
+export type NewUserType = typeof User.$inferInsert;
 
-export const userRelations = relations(user, ({ many }) => ({
-  message: many(message),
-  chat: many(chat),
+export const userRelations = relations(User, ({ many }) => ({
+  message: many(Message),
+  chat: many(Chat),
 }));
 
-export const message = pgTable('message', {
+export const Message = pgTable('message', {
   id: serial('id').primaryKey(),
   body: varchar('body', { length: 2500 }).notNull(),
   timestamp: timestamp('timestamp').default(sql`CURRENT_TIMESTAMP`),
   user_id: integer('user_id')
     .notNull()
-    .references(() => user.id),
+    .references(() => User.id),
   chat_id: integer('chat_id')
     .notNull()
-    .references(() => chat.id),
+    .references(() => Chat.id),
 });
 
-export type Message = typeof message.$inferSelect;
-export type NewMessage = typeof message.$inferInsert;
+export type MessageType = typeof Message.$inferSelect;
+export type NewMessageType = typeof Message.$inferInsert;
 
-export const messageRelations = relations(message, ({ one }) => ({
-  user: one(user, {
-    fields: [message.user_id],
-    references: [user.id],
+export const messageRelations = relations(Message, ({ one }) => ({
+  user: one(User, {
+    fields: [Message.user_id],
+    references: [User.id],
   }),
-  chat: one(chat, {
-    fields: [message.chat_id],
-    references: [chat.id],
+  chat: one(Chat, {
+    fields: [Message.chat_id],
+    references: [Chat.id],
   }),
 }));
 
 export const Friends = pgTable(
   'friends',
   {
-    user_id1: integer('user_id1').references(() => user.id),
-    user_id2: integer('user_id2').references(() => user.id),
+    user_id1: integer('user_id1').references(() => User.id),
+    user_id2: integer('user_id2').references(() => User.id),
     status: friendStatusEnum('status'),
   },
   (table) => {
@@ -82,22 +82,22 @@ export const Friends = pgTable(
   }
 );
 
-export const chat = pgTable('chat', {
+export const Chat = pgTable('chat', {
   id: serial('id').primaryKey(),
-  user_id1: integer('user_id1').references(() => user.id),
-  user_id2: integer('user_id2').references(() => user.id),
+  user_id1: integer('user_id1').references(() => User.id),
+  user_id2: integer('user_id2').references(() => User.id),
   created_at: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const chatRelations = relations(chat, ({ one, many }) => ({
-  message: many(message),
-  user1: one(user, {
-    fields: [chat.user_id1],
-    references: [user.id],
+export const chatRelations = relations(Chat, ({ one, many }) => ({
+  message: many(Message),
+  user1: one(User, {
+    fields: [Chat.user_id1],
+    references: [User.id],
   }),
-  user2: one(user, {
-    fields: [chat.user_id2],
-    references: [user.id],
+  user2: one(User, {
+    fields: [Chat.user_id2],
+    references: [User.id],
   }),
 }));
 
