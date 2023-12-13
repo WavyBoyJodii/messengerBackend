@@ -9,14 +9,14 @@ import {
   pgEnum,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
+import { sql, relations } from 'drizzle-orm';
 
 export const friendStatusEnum = pgEnum('status', [
   'pending',
   'accepted',
   'rejected',
 ]);
-export const User = pgTable(
+export const user = pgTable(
   'user',
   {
     id: serial('id').primaryKey(),
@@ -34,19 +34,45 @@ export const User = pgTable(
   }
 );
 
-export const Message = pgTable('message', {
+export type User = typeof user.$inferSelect;
+export type NewUser = typeof user.$inferInsert;
+
+export const userRelations = relations(user, ({ many }) => ({
+  message: many(message),
+  chat: many(chat),
+}));
+
+export const message = pgTable('message', {
   id: serial('id').primaryKey(),
   body: varchar('body', { length: 2500 }).notNull(),
   timestamp: timestamp('timestamp').default(sql`CURRENT_TIMESTAMP`),
-  user_id: integer('user_id').references(() => User.id),
-  chat_id: integer('chat_id').references(() => Chat.id),
+  user_id: integer('user_id')
+    .notNull()
+    .references(() => user.id),
+  chat_id: integer('chat_id')
+    .notNull()
+    .references(() => chat.id),
 });
 
-export const Friend = pgTable(
-  'friend',
+export type Message = typeof message.$inferSelect;
+export type NewMessage = typeof message.$inferInsert;
+
+export const messageRelations = relations(message, ({ one }) => ({
+  user: one(user, {
+    fields: [message.user_id],
+    references: [user.id],
+  }),
+  chat: one(chat, {
+    fields: [message.chat_id],
+    references: [chat.id],
+  }),
+}));
+
+export const Friends = pgTable(
+  'friends',
   {
-    user_id1: integer('user_id1').references(() => User.id),
-    user_id2: integer('user_id2').references(() => User.id),
+    user_id1: integer('user_id1').references(() => user.id),
+    user_id2: integer('user_id2').references(() => user.id),
     status: friendStatusEnum('status'),
   },
   (table) => {
@@ -56,8 +82,34 @@ export const Friend = pgTable(
   }
 );
 
-export const Chat = pgTable('chat', {
+export const chat = pgTable('chat', {
   id: serial('id').primaryKey(),
-  user_id1: integer('user_id1').references(() => User.id),
-  user_id2: integer('user_id2').references(() => User.id),
+  user_id1: integer('user_id1').references(() => user.id),
+  user_id2: integer('user_id2').references(() => user.id),
+  created_at: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const chatRelations = relations(chat, ({ one, many }) => ({
+  message: many(message),
+  user1: one(user, {
+    fields: [chat.user_id1],
+    references: [user.id],
+  }),
+  user2: one(user, {
+    fields: [chat.user_id2],
+    references: [user.id],
+  }),
+}));
+
+// export const UserChat = pgTable(
+//   'user_chat',
+//   {
+//     user_id: integer('user_id').references(() => User.id),
+//     chat_id: integer('chat_id').references(() => Chat.id),
+//   },
+//   (table) => {
+//     return {
+//       pk: primaryKey({ columns: [table.chat_id, table.user_id] }),
+//     };
+//   }
+// );
