@@ -11,7 +11,9 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import compression from 'compression';
 import helmet from 'helmet';
-
+import { db } from './db/db';
+import { user } from './db/schema';
+import { eq } from 'drizzle-orm';
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 const app = express();
@@ -19,6 +21,29 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, '../', 'views'));
 app.set('view engine', 'pug');
+
+const LocalStrategy = passportLocal.Strategy;
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const result = await db
+        .select()
+        .from(user)
+        .where(eq(user.username, username));
+      if (result.length === 0) {
+        return done(null, false, { message: 'Incorrect username' });
+      }
+      const match = await bcrypt.compare(password, result[0].password);
+      if (!match) {
+        // passwords do not match!
+        return done(null, false, { message: 'Incorrect password' });
+      }
+      return done(null, result[0]);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
 
 app.use(cors());
 app.use(
@@ -60,4 +85,4 @@ app.use(function (
   res.render('error');
 });
 
-module.exports = app;
+export default app;
