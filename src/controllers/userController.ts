@@ -1,5 +1,6 @@
 import { db } from '../db/db';
-import { User, getFriendsList } from '../db/schema';
+import { User } from '../db/schema';
+import { getFriendsList } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
