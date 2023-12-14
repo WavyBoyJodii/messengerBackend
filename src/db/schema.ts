@@ -9,7 +9,7 @@ import {
   pgEnum,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
-import { sql, relations, eq } from 'drizzle-orm';
+import { sql, relations, eq, and } from 'drizzle-orm';
 import { db } from './db';
 
 export const friendStatusEnum = pgEnum('status', [
@@ -41,6 +41,7 @@ export type NewUserType = typeof User.$inferInsert;
 export const userRelations = relations(User, ({ many }) => ({
   message: many(Message),
   chat: many(Chat),
+  friends: many(Friends),
 }));
 
 export const Message = pgTable('message', {
@@ -82,6 +83,17 @@ export const Friends = pgTable(
     };
   }
 );
+
+export const friendRelations = relations(Friends, ({ one }) => ({
+  user: one(User, {
+    fields: [Friends.user_id1],
+    references: [User.id],
+  }),
+  friend: one(User, {
+    fields: [Friends.user_id2],
+    references: [User.id],
+  }),
+}));
 
 export const Chat = pgTable('chat', {
   id: serial('id').primaryKey(),
@@ -129,7 +141,25 @@ export const getUserByUsername = async (username: string) => {
   const user = result[0];
   return user;
 };
+export const getUserById = async (id: number) => {
+  const result = await db.select().from(User).where(eq(User.id, id));
+  if (result.length === 0) return null;
+  const user = result[0];
+  return user;
+};
+
 export const createUser = async (newUser: NewUserType) => {
   const result = await db.insert(User).values(newUser).returning();
+  return result;
+};
+
+export const getFriendsList = async (id: string) => {
+  const idNumber = Number(id);
+  const result = await db.query.Friends.findMany({
+    where: and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'accepted')),
+    with: {
+      friend: true,
+    },
+  });
   return result;
 };
