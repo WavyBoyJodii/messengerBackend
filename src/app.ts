@@ -59,7 +59,7 @@ passport.use(
 );
 
 interface JwtPayload {
-  sub: number; // Assuming 'sub' is a property in your JWT payload
+  sub: string; // Assuming 'sub' is a property in your JWT payload
   // Add other properties here as needed
 }
 const jwtOptions: StrategyOptions = {
@@ -69,11 +69,9 @@ const jwtOptions: StrategyOptions = {
 const JwtStrategy = passportJWT.Strategy;
 passport.use(
   new JwtStrategy(jwtOptions, async (payload: JwtPayload, done) => {
+    const subNumber = Number(payload.sub);
     try {
-      const result = await db
-        .select()
-        .from(User)
-        .where(eq(User.id, payload.sub));
+      const result = await db.select().from(User).where(eq(User.id, subNumber));
       if (result.length === 0) return done(null, false);
       const user = result[0];
       return done(null, user);
