@@ -9,7 +9,8 @@ import {
   pgEnum,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
-import { sql, relations } from 'drizzle-orm';
+import { sql, relations, eq } from 'drizzle-orm';
+import { db } from './db';
 
 export const friendStatusEnum = pgEnum('status', [
   'pending',
@@ -113,3 +114,22 @@ export const chatRelations = relations(Chat, ({ one, many }) => ({
 //     };
 //   }
 // );
+export const getUserByUsername = async (username: string) => {
+  const result = await db
+    .select({
+      id: User.id,
+      username: User.username,
+      email: User.email,
+      firstName: User.first_name,
+      lastName: User.last_name,
+    })
+    .from(User)
+    .where(eq(User.username, username));
+  if (result.length === 0) return null;
+  const user = result[0];
+  return user;
+};
+export const createUser = async (newUser: NewUserType) => {
+  const result = await db.insert(User).values(newUser).returning();
+  return result;
+};
