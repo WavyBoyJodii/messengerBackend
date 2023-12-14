@@ -9,7 +9,8 @@
     "predevStart": "npm run build",
     "devStart": "concurrently \"tsc -w\" \" nodemon ./bin/www\"",
     "generate": "drizzle-kit generate:pg",
-    "migrate": "node dist/db/migrate.js"
+    "migrate": "node dist/db/migrate.js",
+    "genMigrate": "npm run generate && npm run migrate"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
