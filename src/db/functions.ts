@@ -7,7 +7,7 @@ import {
   NewMessageType,
   NewUserType,
 } from './schema';
-import { eq, and, relations } from 'drizzle-orm';
+import { eq, and, relations, or } from 'drizzle-orm';
 import { db } from './db';
 
 export const getUserByUsername = async (username: string) => {
@@ -94,6 +94,14 @@ export const deleteFriend = async (myId: number, friendId: number) => {
     .where(and(eq(Friends.user_id1, myId), eq(Friends.user_id2, friendId)))
     .returning({ deletedId: Friends.user_id2 });
   return deletedFriendId;
+};
+
+export const getChats = async (myId: number) => {
+  const chats = await db.query.Chat.findMany({
+    where: or(eq(Chat.user_id1, myId), eq(Chat.user_id2, myId)),
+    with: { message: true, user1: true, user2: true },
+  });
+  return chats;
 };
 
 export const createChat = async (myId: number, friendId: number) => {

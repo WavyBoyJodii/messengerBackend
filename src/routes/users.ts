@@ -9,14 +9,18 @@ const router = express.Router();
 router.get('/', function (req, res, next) {
   res.send('respond with a resource');
 });
+
+// GET friends list for user in params
 router.get('/friendslist/:id', verifyJwtToken, userController.findFriends);
 
+// GET friend requests for logged in user
 router.get(
   '/friend/request',
   verifyJwtToken,
   userController.viewFriendRequests
 );
 
+// ACCEPT friend request for logged in user
 router.put(
   '/friend/request',
   acceptRequest,
@@ -25,6 +29,7 @@ router.put(
   userController.acceptFriendRequest
 );
 
+// DELETE friend of logged in user
 router.delete(
   '/friend/request',
   acceptRequest,
@@ -33,6 +38,7 @@ router.delete(
   userController.removeFriend
 );
 
+// POST method to send friend request by logged in user
 router.post(
   '/friend/request',
   friendRequest,
@@ -41,6 +47,10 @@ router.post(
   userController.sendFriendRequest
 );
 
+// GET all chats for logged in user
+router.get('/chat', verifyJwtToken, userController.viewMyChats);
+
+// Create new chat for logged in user
 router.post(
   '/chat',
   acceptRequest,
@@ -49,6 +59,7 @@ router.post(
   userController.newChat
 );
 
+// DELETE chat for logged in user
 router.delete(
   '/chat',
   acceptRequest,
