@@ -46,3 +46,17 @@ export const acceptRequest = [
     .escape()
     .withMessage('input must be a number'),
 ];
+
+export const messageVal = [
+  body('message')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('message must have a value'),
+  body('chatId')
+    .trim()
+    .isNumeric()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('input must be a number'),
+];

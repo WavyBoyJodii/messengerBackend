@@ -134,3 +134,8 @@ export const deleteChat = async (myId: number, friendId: number) => {
     .returning();
   return result;
 };
+
+export const createMessage = async (newMessage: NewMessageType) => {
+  const message = await db.insert(Message).values(newMessage).returning();
+  return message;
+};

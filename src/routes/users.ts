@@ -1,7 +1,7 @@
 import express from 'express';
 import * as userController from '../controllers/userController';
 import { verifyJwtToken } from '../middleware/verifyJwt';
-import { acceptRequest, friendRequest } from '../lib/validations';
+import { acceptRequest, friendRequest, messageVal } from '../lib/validations';
 import { validateCheck } from '../middleware/validateCheck';
 const router = express.Router();
 
@@ -68,6 +68,15 @@ router.delete(
   userController.deleteMyChat
 );
 
-// GET single chat with between user and friend
+// GET single chat between user and friend
 router.get('/chat/:id', verifyJwtToken, userController.getMyChat);
+
+// Post route for user sending a message
+router.post(
+  '/message',
+  messageVal,
+  validateCheck,
+  verifyJwtToken,
+  userController.sendMessage
+);
 export default router;

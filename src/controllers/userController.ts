@@ -13,6 +13,7 @@ import {
   deleteChat,
   getChats,
   getChat,
+  createMessage,
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
@@ -139,6 +140,21 @@ export const deleteMyChat = expressAsyncHandler(
         .json({ message: 'There is no relationship to this user' });
     } else {
       res.status(200).json({ message: `chat ${deletedChat} has been deleted` });
+    }
+  }
+);
+
+export const sendMessage = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const message = await createMessage({
+      body: req.body.message,
+      chat_id: req.body.chatId,
+      user_id: req.user.id,
+    });
+    if (!message) {
+      res.status(500).json({ message: 'the message was not sent' });
+    } else {
+      res.status(200).json(JSON.stringify(message));
     }
   }
 );
