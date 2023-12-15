@@ -39,12 +39,6 @@ export const friendRequest = [
 ];
 
 export const acceptRequest = [
-  body('myId')
-    .trim()
-    .isNumeric()
-    .isLength({ min: 1 })
-    .escape()
-    .withMessage('input must be a number'),
   body('friendId')
     .trim()
     .isNumeric()

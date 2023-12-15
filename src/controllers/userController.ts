@@ -2,6 +2,8 @@ import { db } from '../db/db';
 import {
   User,
   acceptFriend,
+  checkFriendship,
+  createChat,
   deleteFriend,
   getFriendRequests,
   getUserById,
@@ -75,5 +77,19 @@ export const removeFriend = expressAsyncHandler(
         message: `you have denied ${deletedFriend.username}'s friend request`,
       });
     }
+  }
+);
+
+export const newChat = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // check if requested user is friends with user
+    const relationship = await checkFriendship(req.user.id, req.body.friendId);
+    if (!relationship) {
+      res
+        .status(404)
+        .json({ message: 'There is no relationship to this user' });
+    }
+    const chat = await createChat(req.user.id, req.body.friendId);
+    res.status(200).json(JSON.stringify(chat));
   }
 );

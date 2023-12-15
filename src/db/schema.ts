@@ -49,6 +49,8 @@ export const Chat = pgTable('chat', {
   created_at: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
+export type NewChat = typeof Chat.$inferInsert;
+
 export const Message = pgTable('message', {
   id: serial('id').primaryKey(),
   body: varchar('body', { length: 2500 }).notNull(),
@@ -163,6 +165,20 @@ export const createUser = async (newUser: NewUserType) => {
   return result;
 };
 
+export const checkFriendship = async (myId: number, friendId: number) => {
+  const result = await db.query.Friends.findFirst({
+    where: and(
+      eq(Friends.user_id1, myId),
+      eq(Friends.user_id2, friendId),
+      eq(Friends.status, 'accepted')
+    ),
+    with: {
+      friend: true,
+    },
+  });
+  return result;
+};
+
 export const getFriendsList = async (id: string) => {
   const idNumber = Number(id);
   const result = await db.query.Friends.findMany({
@@ -206,4 +222,12 @@ export const deleteFriend = async (myId: number, friendId: number) => {
     .where(and(eq(Friends.user_id1, myId), eq(Friends.user_id2, friendId)))
     .returning({ deletedId: Friends.user_id2 });
   return deletedFriendId;
+};
+
+export const createChat = async (myId: number, friendId: number) => {
+  const result = await db
+    .insert(Chat)
+    .values({ user_id1: myId, user_id2: friendId })
+    .returning();
+  return result;
 };

@@ -41,4 +41,11 @@ router.post(
   userController.sendFriendRequest
 );
 
+router.post(
+  '/chat/create',
+  acceptRequest,
+  validateCheck,
+  verifyJwtToken,
+  userController.newChat
+);
 export default router;
