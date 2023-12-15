@@ -42,10 +42,18 @@ router.post(
 );
 
 router.post(
-  '/chat/create',
+  '/chat',
   acceptRequest,
   validateCheck,
   verifyJwtToken,
   userController.newChat
+);
+
+router.delete(
+  '/chat',
+  acceptRequest,
+  validateCheck,
+  verifyJwtToken,
+  userController.deleteMyChat
 );
 export default router;
