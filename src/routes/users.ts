@@ -25,6 +25,14 @@ router.put(
   userController.acceptFriendRequest
 );
 
+router.delete(
+  '/friend/request',
+  acceptRequest,
+  validateCheck,
+  verifyJwtToken,
+  userController.removeFriend
+);
+
 router.post(
   '/friend/request',
   friendRequest,

@@ -35,7 +35,7 @@ export const friendRequest = [
     .isLength({ min: 1 })
     .escape()
     .withMessage('must input username'),
-  body('userId').trim().isLength({ min: 1 }).escape(),
+  // body('userId').trim().isLength({ min: 1 }).escape(),
 ];
 
 export const acceptRequest = [

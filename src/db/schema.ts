@@ -199,3 +199,11 @@ export const acceptFriend = async (myId: number, friendId: number) => {
 
   return newFriend;
 };
+
+export const deleteFriend = async (myId: number, friendId: number) => {
+  const deletedFriendId = await db
+    .delete(Friends)
+    .where(and(eq(Friends.user_id1, myId), eq(Friends.user_id2, friendId)))
+    .returning({ deletedId: Friends.user_id2 });
+  return deletedFriendId;
+};
