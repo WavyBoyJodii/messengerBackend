@@ -174,7 +174,28 @@ export const getFriendsList = async (id: string) => {
   return result;
 };
 
+export const getFriendRequests = async (id: string) => {
+  const idNumber = Number(id);
+  const result = await db.query.Friends.findMany({
+    where: and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'pending')),
+    with: {
+      friend: true,
+    },
+  });
+  return result;
+};
+
 export const addFriend = async (newFriend: NewFriendsType) => {
   const result = await db.insert(Friends).values(newFriend).returning();
   return result;
+};
+
+export const acceptFriend = async (myId: number, friendId: number) => {
+  const newFriend = await db
+    .update(Friends)
+    .set({ status: 'accepted' })
+    .where(and(eq(Friends.user_id1, myId), eq(Friends.user_id2, friendId)))
+    .returning();
+
+  return newFriend;
 };
