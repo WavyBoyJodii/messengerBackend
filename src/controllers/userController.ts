@@ -1,14 +1,17 @@
 import { db } from '../db/db';
+import { User } from '../db/schema';
 import {
-  User,
+  addFriend,
+  getFriendsList,
+  getUserByUsername,
   acceptFriend,
   checkFriendship,
   createChat,
   deleteFriend,
   getFriendRequests,
   getUserById,
-} from '../db/schema';
-import { addFriend, getFriendsList, getUserByUsername } from '../db/schema';
+  deleteChat,
+} from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
@@ -91,5 +94,18 @@ export const newChat = expressAsyncHandler(
     }
     const chat = await createChat(req.user.id, req.body.friendId);
     res.status(200).json(JSON.stringify(chat));
+  }
+);
+
+export const deleteMyChat = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const deletedChat = await deleteChat(req.user.id, req.body.friendId);
+    if (!deletedChat) {
+      res
+        .status(404)
+        .json({ message: 'There is no relationship to this user' });
+    } else {
+      res.status(200).json({ message: `chat ${deletedChat} has been deleted` });
+    }
   }
 );
