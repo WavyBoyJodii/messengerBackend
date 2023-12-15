@@ -48,7 +48,7 @@ router.post(
 );
 
 // GET all chats for logged in user
-router.get('/chat', verifyJwtToken, userController.viewMyChats);
+router.get('/chats', verifyJwtToken, userController.viewMyChats);
 
 // Create new chat for logged in user
 router.post(
@@ -67,4 +67,7 @@ router.delete(
   verifyJwtToken,
   userController.deleteMyChat
 );
+
+// GET single chat with between user and friend
+router.get('/chat/:id', verifyJwtToken, userController.getMyChat);
 export default router;

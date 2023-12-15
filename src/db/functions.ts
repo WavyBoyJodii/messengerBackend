@@ -104,10 +104,25 @@ export const getChats = async (myId: number) => {
   return chats;
 };
 
+export const getChat = async (myId: number, friendId: number) => {
+  const chat = await db.query.Chat.findFirst({
+    where: or(
+      and(eq(Chat.user_id1, myId), eq(Chat.user_id2, friendId)),
+      and(eq(Chat.user_id1, friendId), eq(Chat.user_id2, myId))
+    ),
+    with: { message: true, user1: true, user2: true },
+  });
+  return chat;
+};
+
 export const createChat = async (myId: number, friendId: number) => {
   const result = await db
     .insert(Chat)
-    .values({ user_id1: myId, user_id2: friendId })
+    .values({
+      user_id1: myId,
+      user_id2: friendId,
+      chatId: `${myId}--${friendId}`,
+    })
     .returning();
   return result;
 };
@@ -116,6 +131,6 @@ export const deleteChat = async (myId: number, friendId: number) => {
   const result = await db
     .delete(Chat)
     .where(and(eq(Chat.user_id1, myId), eq(Chat.user_id2, friendId)))
-    .returning({ deletedId: Chat.id });
+    .returning();
   return result;
 };

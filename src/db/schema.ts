@@ -46,6 +46,7 @@ export const Chat = pgTable('chat', {
   user_id2: integer('user_id2')
     .notNull()
     .references(() => User.id),
+  chatId: varchar('chat_id', { length: 300 }).unique().notNull(),
   created_at: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
@@ -60,7 +61,7 @@ export const Message = pgTable('message', {
     .references(() => User.id),
   chat_id: integer('chat_id')
     .notNull()
-    .references(() => Chat.id, { onDelete: 'cascade' }),
+    .references(() => Chat.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 });
 
 export type MessageType = typeof Message.$inferSelect;

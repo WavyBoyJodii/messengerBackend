@@ -12,6 +12,7 @@ import {
   getUserById,
   deleteChat,
   getChats,
+  getChat,
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
@@ -112,6 +113,20 @@ export const newChat = expressAsyncHandler(
     }
     const chat = await createChat(req.user.id, req.body.friendId);
     res.status(200).json(JSON.stringify(chat));
+  }
+);
+
+export const getMyChat = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const friendId = Number(req.params.friendId);
+    const chat = await getChat(req.user.id, friendId);
+    if (!chat) {
+      res
+        .status(400)
+        .json({ message: 'there is no chat between these two users' });
+    } else {
+      res.status(200).json(JSON.stringify(chat));
+    }
   }
 );
 
