@@ -7,7 +7,7 @@ import { body, validationResult } from 'express-validator';
 import expressAsyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import { Request, Response, NextFunction } from 'express';
-import { createUser, getUserByUsername } from '../db/functions';
+import { createUser, getUserByUsername } from '../db/schema';
 import * as dotenv from 'dotenv';
 dotenv.config();
 const jwtAccess = process.env.ACCESS_TOKEN_SECRET;

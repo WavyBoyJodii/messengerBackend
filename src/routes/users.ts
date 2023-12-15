@@ -1,6 +1,8 @@
 import express from 'express';
 import * as userController from '../controllers/userController';
-import { verifyJwtToken } from 'middleware/verifyJwt';
+import { verifyJwtToken } from '../middleware/verifyJwt';
+import { friendRequest } from '../lib/validations';
+import { validateCheck } from '../middleware/validateCheck';
 const router = express.Router();
 
 /* GET users listing. */
@@ -9,5 +11,13 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/friendslist/:id', verifyJwtToken, userController.findFriends);
+
+router.post(
+  '/friend/request',
+  friendRequest,
+  validateCheck,
+  verifyJwtToken,
+  userController.sendFriendRequest
+);
 
 export default router;

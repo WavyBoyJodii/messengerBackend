@@ -1,5 +1,5 @@
 import { db } from '../db/db';
-import { User } from '../db/schema';
+import { User, UserType } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import express from 'express';
 import jwt from 'jsonwebtoken';
@@ -37,7 +37,9 @@ router.post('/login', (req, res, next) => {
           res.status(400).json({ err });
         }
         const token = jwt.sign({ sub: user.id }, jwtAccess);
-        return res.status(200).json({ user, token });
+        const username = user.username;
+        const userId = user.id;
+        return res.status(200).json({ username, userId, token });
       });
     }
   )(req, res);

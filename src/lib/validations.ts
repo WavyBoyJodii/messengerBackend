@@ -28,3 +28,12 @@ export const register = [
     .withMessage('must input Last Name'),
   body('photo').trim().escape(),
 ];
+
+export const friendRequest = [
+  body('requestedUser')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('must input username'),
+  body('userId').trim().isLength({ min: 1 }).escape(),
+];

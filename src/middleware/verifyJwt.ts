@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { getUserById } from '../db/functions';
+import { getUserById } from '../db/schema';
 dotenv.config();
 const jwtAccess = process.env.ACCESS_TOKEN_SECRET;
 

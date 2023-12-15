@@ -82,12 +82,13 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async (id: number, done) => {
+passport.deserializeUser(async (id: string, done) => {
   try {
-    const result = await db.select().from(User).where(eq(User.id, id));
+    const idNumber = Number(id);
+    const result = await db.select().from(User).where(eq(User.id, idNumber));
     const user = result[0];
     done(null, user);
   } catch (err) {
