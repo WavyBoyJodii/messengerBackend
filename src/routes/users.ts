@@ -6,8 +6,8 @@ import { validateCheck } from '../middleware/validateCheck';
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+router.get('/verify', verifyJwtToken, function (req, res, next) {
+  res.status(200).send(true);
 });
 
 // GET friends list for user in params
