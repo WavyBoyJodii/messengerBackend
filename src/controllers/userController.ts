@@ -64,7 +64,8 @@ export const viewFriendRequests = expressAsyncHandler(
 
 export const acceptFriendRequest = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const newFriend = await acceptFriend(req.user.id, req.body.friendId);
+    const friendId = Number(req.params.id);
+    const newFriend = await acceptFriend(req.user.id, friendId);
     if (newFriend.length === 0) {
       res.status(400).json({ message: 'This user has not requested you' });
     } else {
@@ -78,7 +79,8 @@ export const acceptFriendRequest = expressAsyncHandler(
 
 export const removeFriend = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const deletedFriendId = await deleteFriend(req.user.id, req.body.friendId);
+    const friendId = Number(req.params.id);
+    const deletedFriendId = await deleteFriend(req.user.id, friendId);
     if (deletedFriendId.length === 0) {
       res
         .status(400)

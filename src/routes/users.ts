@@ -22,7 +22,7 @@ router.get(
 
 // ACCEPT friend request for logged in user
 router.put(
-  '/friend/request',
+  '/friend/:id',
   acceptRequest,
   validateCheck,
   verifyJwtToken,
@@ -31,7 +31,7 @@ router.put(
 
 // DELETE friend of logged in user
 router.delete(
-  '/friend/request',
+  '/friend/:id',
   acceptRequest,
   validateCheck,
   verifyJwtToken,
