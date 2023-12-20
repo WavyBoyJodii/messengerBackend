@@ -10,6 +10,9 @@ router.get('/verify', verifyJwtToken, function (req, res, next) {
   res.status(200).send(true);
 });
 
+// Get Me returns current user for logged in user
+router.get('/me', verifyJwtToken, userController.provideUser);
+
 // GET friends list for user in params
 router.get('/friendslist/:id', verifyJwtToken, userController.findFriends);
 

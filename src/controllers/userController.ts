@@ -18,6 +18,13 @@ import {
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
+export const provideUser = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const me = await getUserByUsername(req.user.username);
+    res.status(200).json(`${JSON.stringify(me)}`);
+  }
+);
+
 export const findFriends = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log('finding friends....');
