@@ -119,7 +119,7 @@ export const newChat = expressAsyncHandler(
 
 export const getMyChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const friendId = Number(req.params.friendId);
+    const friendId = Number(req.params.id);
     const chat = await getChat(req.user.id, friendId);
     if (!chat) {
       res
@@ -133,7 +133,8 @@ export const getMyChat = expressAsyncHandler(
 
 export const deleteMyChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const deletedChat = await deleteChat(req.user.id, req.body.friendId);
+    const friendId = Number(req.params.id);
+    const deletedChat = await deleteChat(req.user.id, friendId);
     if (!deletedChat) {
       res
         .status(400)

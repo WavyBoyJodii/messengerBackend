@@ -61,7 +61,7 @@ router.post(
 
 // DELETE chat for logged in user
 router.delete(
-  '/chat',
+  '/chat/:id',
   acceptRequest,
   validateCheck,
   verifyJwtToken,
