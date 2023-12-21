@@ -7,7 +7,7 @@ import {
   NewMessageType,
   NewUserType,
 } from './schema';
-import { eq, and, relations, or } from 'drizzle-orm';
+import { eq, and, relations, or, desc } from 'drizzle-orm';
 import { db } from './db';
 
 export const getUserByUsername = async (username: string) => {
@@ -110,7 +110,13 @@ export const getChat = async (myId: number, friendId: number) => {
       and(eq(Chat.user_id1, myId), eq(Chat.user_id2, friendId)),
       and(eq(Chat.user_id1, friendId), eq(Chat.user_id2, myId))
     ),
-    with: { message: true, user1: true, user2: true },
+    with: {
+      message: {
+        orderBy: [desc(Message.timestamp)],
+      },
+      user1: true,
+      user2: true,
+    },
   });
   return chat;
 };
