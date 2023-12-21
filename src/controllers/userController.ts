@@ -107,7 +107,7 @@ export const viewMyChats = expressAsyncHandler(
     if (chats.length === 0) {
       res.status(200).json({ message: 'user has no chats' });
     } else {
-      res.status(200).json(JSON.stringify(chats));
+      res.status(200).json(`${JSON.stringify(chats)}, me: ${req.user.id}`);
     }
   }
 );
