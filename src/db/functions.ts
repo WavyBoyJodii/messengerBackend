@@ -99,7 +99,14 @@ export const deleteFriend = async (myId: number, friendId: number) => {
 export const getChats = async (myId: number) => {
   const chats = await db.query.Chat.findMany({
     where: or(eq(Chat.user_id1, myId), eq(Chat.user_id2, myId)),
-    with: { message: true, user1: true, user2: true },
+    with: {
+      message: {
+        orderBy: [desc(Message.timestamp)],
+      },
+      user1: true,
+      user2: true,
+    },
+    orderBy: [desc(Message.timestamp)],
   });
   return chats;
 };
