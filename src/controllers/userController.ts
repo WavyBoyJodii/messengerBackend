@@ -147,7 +147,7 @@ export const getMyChat = expressAsyncHandler(
         .status(400)
         .json({ message: 'there is no chat between these two users' });
     } else {
-      res.status(200).json(JSON.stringify(chat));
+      res.status(200).json(`${JSON.stringify(chat)}, me: ${req.user.id}`);
     }
   }
 );
