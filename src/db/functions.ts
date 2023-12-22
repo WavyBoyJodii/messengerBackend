@@ -111,12 +111,9 @@ export const getChats = async (myId: number) => {
   return chats;
 };
 
-export const getChat = async (myId: number, friendId: number) => {
+export const getChat = async (chatId: string) => {
   const chat = await db.query.Chat.findFirst({
-    where: or(
-      and(eq(Chat.user_id1, myId), eq(Chat.user_id2, friendId)),
-      and(eq(Chat.user_id1, friendId), eq(Chat.user_id2, myId))
-    ),
+    where: eq(Chat.chatId, chatId),
     with: {
       message: {
         orderBy: [desc(Message.timestamp)],
