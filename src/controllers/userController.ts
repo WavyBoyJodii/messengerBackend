@@ -25,6 +25,18 @@ export const provideUser = expressAsyncHandler(
   }
 );
 
+export const searchUser = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const searchId = Number(req.params.id);
+    const user = await getUserById(searchId);
+    if (!user) {
+      res.status(400).json({ message: 'User does not exist' });
+    } else {
+      res.status(200).json(JSON.stringify(user));
+    }
+  }
+);
+
 export const findFriends = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log('finding friends....');
