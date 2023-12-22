@@ -51,6 +51,7 @@ export const Chat = pgTable('chat', {
 });
 
 export type NewChat = typeof Chat.$inferInsert;
+export type ChatType = typeof Chat.$inferSelect;
 
 export const Message = pgTable('message', {
   id: serial('id').primaryKey(),
