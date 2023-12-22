@@ -140,8 +140,8 @@ export const newChat = expressAsyncHandler(
 
 export const getMyChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const friendId = Number(req.params.id);
-    const chat = await getChat(req.user.id, friendId);
+    const chatId = req.params.id;
+    const chat = await getChat(chatId);
     if (!chat) {
       res
         .status(400)
