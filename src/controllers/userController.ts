@@ -32,7 +32,12 @@ export const searchUser = expressAsyncHandler(
     if (!user) {
       res.status(400).json({ message: 'User does not exist' });
     } else {
-      res.status(200).json({ user });
+      res.status(200).json({
+        username: `${user.username}`,
+        userId: `${user.id}`,
+        profilePhoto: `${user.profile_photo}`,
+        email: `${user.email}`,
+      });
     }
   }
 );
