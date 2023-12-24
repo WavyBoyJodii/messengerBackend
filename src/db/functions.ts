@@ -106,7 +106,6 @@ export const getChats = async (myId: number) => {
       user1: true,
       user2: true,
     },
-    orderBy: [or(desc(Message.timestamp), desc(Chat.created_at))],
   });
   return chats;
 };
