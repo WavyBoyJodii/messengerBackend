@@ -129,7 +129,7 @@ export const viewMyChats = expressAsyncHandler(
     const userId = Number(req.params.id);
     const chats = await getChats(userId);
     if (!chats) {
-      res.status(500).json({ message: `req.user.id = ${req.user.id}` });
+      res.status(500).json({ message: `req.params.id = ${req.params.id}` });
     }
     if (chats.length === 0) {
       res.status(200).json({ message: 'user has no chats' });
