@@ -126,7 +126,8 @@ export const removeFriend = expressAsyncHandler(
 
 export const viewMyChats = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const chats = await getChats(req.user.id);
+    const userId = Number(req.params.id);
+    const chats = await getChats(userId);
     if (!chats) {
       res.status(500).json({ message: `req.user.id = ${req.user.id}` });
     }

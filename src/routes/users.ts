@@ -63,7 +63,7 @@ router.post(
 );
 
 // GET all chats for logged in user
-router.get('/chats', verifyJwtToken, userController.viewMyChats);
+router.get('/chats/:id', verifyJwtToken, userController.viewMyChats);
 
 // Create new chat for logged in user
 router.post(
