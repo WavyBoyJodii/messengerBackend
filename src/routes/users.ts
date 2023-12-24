@@ -13,7 +13,16 @@ router.get('/verify', verifyJwtToken, function (req, res, next) {
 // Get Me returns current user for logged in user
 router.get('/me', verifyJwtToken, userController.provideUser);
 
-// Get Find method to search for users in DB
+// Post method to search user by username
+router.post(
+  '/find',
+  verifyJwtToken,
+  friendRequest,
+  validateCheck,
+  userController.searchUserByUsername
+);
+
+// Get Find method to search for users in DB by id
 router.get('/find/:id', verifyJwtToken, userController.searchUser);
 
 // GET friends list for user in params

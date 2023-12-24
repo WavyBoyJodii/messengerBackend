@@ -37,6 +37,17 @@ export const searchUser = expressAsyncHandler(
   }
 );
 
+export const searchUserByUsername = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await getUserByUsername(req.body.requestedUser);
+    if (!user) {
+      res.status(400).json({ message: 'User does not exist' });
+    } else {
+      res.status(200).json(JSON.stringify(user));
+    }
+  }
+);
+
 export const findFriends = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log('finding friends....');
