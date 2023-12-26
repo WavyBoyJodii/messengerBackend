@@ -18,6 +18,7 @@ export const getUserByUsername = async (username: string) => {
       email: User.email,
       firstName: User.first_name,
       lastName: User.last_name,
+      profile_photo: User.profile_photo,
     })
     .from(User)
     .where(eq(User.username, username));
