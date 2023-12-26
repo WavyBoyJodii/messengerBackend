@@ -49,10 +49,10 @@ export const searchUserByUsername = expressAsyncHandler(
       res.status(400).json({ message: 'User does not exist' });
     } else {
       res.status(200).json({
-        username: `${user.username}`,
-        userId: `${user.id}`,
-        profilePhoto: `${user.profile_photo}`,
-        email: `${user.email}`,
+        username: user.username,
+        id: user.id,
+        profilePhoto: user.profile_photo,
+        email: user.email,
       });
     }
   }
