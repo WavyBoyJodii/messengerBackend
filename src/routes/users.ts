@@ -14,11 +14,9 @@ router.get('/verify', verifyJwtToken, function (req, res, next) {
 router.get('/me', verifyJwtToken, userController.provideUser);
 
 // Post method to search user by username
-router.post(
-  '/find',
+router.get(
+  '/findbyusername/:username',
   verifyJwtToken,
-  friendRequest,
-  validateCheck,
   userController.searchUserByUsername
 );
 
@@ -29,11 +27,7 @@ router.get('/find/:id', verifyJwtToken, userController.searchUser);
 router.get('/friendslist/:id', verifyJwtToken, userController.findFriends);
 
 // GET friend requests for logged in user
-router.get(
-  '/friend/request',
-  verifyJwtToken,
-  userController.viewFriendRequests
-);
+router.get('/friend/:id', verifyJwtToken, userController.viewFriendRequests);
 
 // ACCEPT friend request for logged in user
 router.put(

@@ -101,11 +101,11 @@ export const sendFriendRequest = expressAsyncHandler(
 
 export const viewFriendRequests = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const requests = await getFriendRequests(`${req.user.id}`);
+    const requests = await getFriendRequests(req.params.id);
     if (requests.length === 0) {
       res.status(200).json({ message: 'user has no friends' });
     } else {
-      res.status(200).json(`${JSON.stringify(requests)}`);
+      res.status(200).json(JSON.stringify(requests));
     }
   }
 );
