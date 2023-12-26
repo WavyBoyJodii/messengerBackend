@@ -40,10 +40,17 @@ export const createUser = async (newUser: NewUserType) => {
 
 export const checkFriendship = async (myId: number, friendId: number) => {
   const result = await db.query.Friends.findFirst({
-    where: and(
-      eq(Friends.user_id1, myId),
-      eq(Friends.user_id2, friendId),
-      eq(Friends.status, 'accepted')
+    where: or(
+      and(
+        eq(Friends.user_id1, myId),
+        eq(Friends.user_id2, friendId),
+        eq(Friends.status, 'accepted')
+      ),
+      and(
+        eq(Friends.user_id1, friendId),
+        eq(Friends.user_id2, myId),
+        eq(Friends.status, 'accepted')
+      )
     ),
     with: {
       friend: true,
@@ -66,7 +73,10 @@ export const getFriendsList = async (id: string) => {
 export const getFriendRequests = async (id: string) => {
   const idNumber = Number(id);
   const result = await db.query.Friends.findMany({
-    where: and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'pending')),
+    where: or(
+      and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'pending')),
+      and(eq(Friends.user_id2, idNumber), eq(Friends.status, 'pending'))
+    ),
     with: {
       friend: true,
     },
