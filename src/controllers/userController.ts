@@ -44,7 +44,7 @@ export const searchUser = expressAsyncHandler(
 
 export const searchUserByUsername = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await getUserByUsername(req.body.requestedUser);
+    const user = await getUserByUsername(req.params.username);
     if (!user) {
       res.status(400).json({ message: 'User does not exist' });
     } else {
@@ -70,13 +70,15 @@ export const findFriends = expressAsyncHandler(
 
 export const sendFriendRequest = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userToAdd = await getUserByUsername(req.body.requestedUser);
-    if (!userToAdd) {
-      res.status(400).json({ message: 'User does not exist' });
-    } else {
+    const user = await getUserById(req.body.requestedUser);
+    const relation = await checkFriendship(
+      req.body.userId,
+      req.body.requestedUser
+    );
+    if (!relation) {
       const result = await addFriend({
-        user_id1: req.user.id,
-        user_id2: userToAdd.id,
+        user_id1: req.body.userId,
+        user_id2: req.body.requestedUser,
       });
       if (!result) {
         res.status(500).json({
@@ -85,7 +87,13 @@ export const sendFriendRequest = expressAsyncHandler(
       } else {
         res
           .status(200)
-          .json({ message: `friend request sent to ${userToAdd.username}` });
+          .json({ message: `friend request sent to ${user.username}` });
+      }
+    } else {
+      if (relation.status === 'accepted') {
+        res.status(400).json({ message: 'User is already your friend' });
+      } else {
+        res.status(400).json({ message: 'User has already been requested' });
       }
     }
   }
