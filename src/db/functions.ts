@@ -78,7 +78,16 @@ export const getFriendRequests = async (id: string) => {
       and(eq(Friends.user_id2, idNumber), eq(Friends.status, 'pending'))
     ),
     with: {
-      friend: true,
+      friend: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
     },
   });
   return result;
