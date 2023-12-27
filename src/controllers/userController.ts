@@ -139,7 +139,7 @@ export const removeFriend = expressAsyncHandler(
     } else {
       const deletedFriend = await getUserById(friendId);
       res.status(200).json({
-        message: `you have removed ${deletedFriend.username}'s friend request`,
+        message: `you have denied ${deletedFriend.username}'s friend request`,
       });
     }
   }
@@ -155,7 +155,7 @@ export const viewMyChats = expressAsyncHandler(
     if (chats.length === 0) {
       res.status(404).json({ message: 'user has no chats' });
     } else {
-      res.status(200).json(JSON.stringify(chats));
+      res.status(200).json(`${JSON.stringify(chats)}, me: ${userId}`);
     }
   }
 );
@@ -179,12 +179,18 @@ export const newChat = expressAsyncHandler(
     const oldChat2 = await getChat(chatId2);
     if (!oldChat1 && !oldChat2) {
       const newChat = await createChat(req.body.userId, req.body.friendId);
-      res.status(200).json(JSON.stringify(newChat));
+      res
+        .status(200)
+        .json(`${JSON.stringify(newChat)}, me: ${req.body.userId} `);
     } else {
       if (oldChat1) {
-        res.status(200).json(JSON.stringify(oldChat1));
+        res
+          .status(200)
+          .json(`${JSON.stringify(oldChat1)}, me: ${req.body.userId} `);
       } else {
-        res.status(200).json(JSON.stringify(oldChat2));
+        res
+          .status(200)
+          .json(`${JSON.stringify(oldChat2)}, me: ${req.body.userId} `);
       }
     }
   }
