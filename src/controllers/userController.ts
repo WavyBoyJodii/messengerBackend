@@ -128,14 +128,16 @@ export const acceptFriendRequest = expressAsyncHandler(
 
 export const removeFriend = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const friendId = Number(req.params.id);
-    const deletedFriendId = await deleteFriend(req.user.id, friendId);
+    const friendAndUser = req.params.id.split('--');
+    const friendId = Number(friendAndUser[0]);
+    const myId = Number(friendAndUser[1]);
+    const deletedFriendId = await deleteFriend(myId, friendId);
     if (deletedFriendId.length === 0) {
       res
         .status(400)
         .json({ message: 'There is no relationship to this user' });
     } else {
-      const deletedFriend = await getUserById(deletedFriendId[0].deletedId);
+      const deletedFriend = await getUserById(friendId);
       res.status(200).json({
         message: `you have denied ${deletedFriend.username}'s friend request`,
       });

@@ -39,13 +39,7 @@ router.put(
 );
 
 // DELETE friend of logged in user
-router.delete(
-  '/friend/',
-  acceptRequest,
-  validateCheck,
-  verifyJwtToken,
-  userController.removeFriend
-);
+router.delete('/friend/:id', verifyJwtToken, userController.removeFriend);
 
 // POST method to send friend request by logged in user
 router.post(
