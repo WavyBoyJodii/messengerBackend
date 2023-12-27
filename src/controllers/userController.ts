@@ -105,7 +105,7 @@ export const viewFriendRequests = expressAsyncHandler(
     if (requests.length === 0) {
       res.status(404).json({ message: 'user has no requests' });
     } else {
-      res.status(200).json(requests);
+      res.status(200).json(JSON.stringify(requests));
     }
   }
 );
