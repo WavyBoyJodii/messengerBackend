@@ -112,7 +112,12 @@ export const acceptFriend = async (myId: number, friendId: number) => {
   const newFriend = await db
     .update(Friends)
     .set({ status: 'accepted' })
-    .where(and(eq(Friends.user_id1, myId), eq(Friends.user_id2, friendId)))
+    .where(
+      or(
+        and(eq(Friends.user_id1, myId), eq(Friends.user_id2, friendId)),
+        and(eq(Friends.user_id1, friendId), eq(Friends.user_id2, myId))
+      )
+    )
     .returning();
 
   return newFriend;

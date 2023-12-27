@@ -31,7 +31,7 @@ router.get('/friend/:id', verifyJwtToken, userController.viewFriendRequests);
 
 // ACCEPT friend request for logged in user
 router.put(
-  '/friend/:id',
+  '/friend/',
   acceptRequest,
   validateCheck,
   verifyJwtToken,
@@ -40,7 +40,7 @@ router.put(
 
 // DELETE friend of logged in user
 router.delete(
-  '/friend/:id',
+  '/friend/',
   acceptRequest,
   validateCheck,
   verifyJwtToken,

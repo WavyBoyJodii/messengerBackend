@@ -45,6 +45,7 @@ export const acceptRequest = [
     .isLength({ min: 1 })
     .escape()
     .withMessage('input must be a number'),
+  body('userId').trim().isLength({ min: 1 }).escape(),
 ];
 
 export const messageVal = [
