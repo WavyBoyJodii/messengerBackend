@@ -88,6 +88,16 @@ export const getFriendRequests = async (id: string) => {
           profile_photo: true,
         },
       },
+      user: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
     },
   });
   return result;
