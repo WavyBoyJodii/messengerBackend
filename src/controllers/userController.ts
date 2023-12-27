@@ -139,7 +139,7 @@ export const removeFriend = expressAsyncHandler(
     } else {
       const deletedFriend = await getUserById(friendId);
       res.status(200).json({
-        message: `you have denied ${deletedFriend.username}'s friend request`,
+        message: `you have removed ${deletedFriend.username}'s friend request`,
       });
     }
   }
@@ -155,7 +155,7 @@ export const viewMyChats = expressAsyncHandler(
     if (chats.length === 0) {
       res.status(404).json({ message: 'user has no chats' });
     } else {
-      res.status(200).json(`${JSON.stringify(chats)}, me: ${req.user.id}`);
+      res.status(200).json(JSON.stringify(chats));
     }
   }
 );
@@ -163,14 +163,30 @@ export const viewMyChats = expressAsyncHandler(
 export const newChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     // check if requested user is friends with user
-    const relationship = await checkFriendship(req.user.id, req.body.friendId);
+    const relationship = await checkFriendship(
+      req.body.userId,
+      req.body.friendId
+    );
     if (!relationship) {
       res
         .status(400)
         .json({ message: 'There is no relationship to this user' });
     }
-    const chat = await createChat(req.user.id, req.body.friendId);
-    res.status(200).json(JSON.stringify(chat));
+    // check if a chat already exists between the users
+    const chatId1 = `${req.body.userId}--${req.body.friendId}`;
+    const chatId2 = `${req.body.friendId}--${req.body.userId}`;
+    const oldChat1 = await getChat(chatId1);
+    const oldChat2 = await getChat(chatId2);
+    if (!oldChat1 && !oldChat2) {
+      const newChat = await createChat(req.body.userId, req.body.friendId);
+      res.status(200).json(JSON.stringify(newChat));
+    } else {
+      if (oldChat1) {
+        res.status(200).json(JSON.stringify(oldChat1));
+      } else {
+        res.status(200).json(JSON.stringify(oldChat2));
+      }
+    }
   }
 );
 
