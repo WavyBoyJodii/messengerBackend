@@ -63,7 +63,7 @@ export const findFriends = expressAsyncHandler(
     console.log('finding friends....');
     const friends = await getFriendsList(req.params.id);
     if (friends.length === 0) {
-      res.status(404).json({ message: 'user has no friends' });
+      res.status(200).json({ message: 'user has no friends' });
     } else res.status(200).json(`${JSON.stringify(friends)}`);
   }
 );
@@ -91,9 +91,9 @@ export const sendFriendRequest = expressAsyncHandler(
       }
     } else {
       if (relation.status === 'accepted') {
-        res.status(400).json({ message: 'User is already your friend' });
+        res.status(200).json({ message: 'User is already your friend' });
       } else {
-        res.status(400).json({ message: 'User has already been requested' });
+        res.status(200).json({ message: 'User has already been requested' });
       }
     }
   }
@@ -103,7 +103,7 @@ export const viewFriendRequests = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const requests = await getFriendRequests(req.params.id);
     if (requests.length === 0) {
-      res.status(404).json({ message: 'user has no requests' });
+      res.status(200).json({ message: 'user has no requests' });
     } else {
       res.status(200).json(JSON.stringify(requests));
     }
@@ -116,7 +116,7 @@ export const acceptFriendRequest = expressAsyncHandler(
     const myId = Number(req.body.userId);
     const newFriend = await acceptFriend(myId, friendId);
     if (newFriend.length === 0) {
-      res.status(400).json({ message: 'This user has not requested you' });
+      res.status(200).json({ message: 'This user has not requested you' });
     } else {
       const friend = await getUserById(friendId);
       res
@@ -153,7 +153,7 @@ export const viewMyChats = expressAsyncHandler(
       res.status(500).json({ message: `req.params.id = ${req.params.id}` });
     }
     if (chats.length === 0) {
-      res.status(404).json({ message: 'user has no chats' });
+      res.status(200).json({ message: 'user has no chats' });
     } else {
       res.status(200).json(chats);
     }
