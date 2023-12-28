@@ -62,9 +62,31 @@ export const checkFriendship = async (myId: number, friendId: number) => {
 export const getFriendsList = async (id: string) => {
   const idNumber = Number(id);
   const result = await db.query.Friends.findMany({
-    where: and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'accepted')),
+    where: or(
+      and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'accepted')),
+      and(eq(Friends.user_id2, idNumber), eq(Friends.status, 'accepted'))
+    ),
     with: {
-      friend: true,
+      friend: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
+      user: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
     },
   });
   return result;
