@@ -155,7 +155,7 @@ export const viewMyChats = expressAsyncHandler(
     if (chats.length === 0) {
       res.status(404).json({ message: 'user has no chats' });
     } else {
-      res.status(200).json(`chats: ${chats}, me: ${userId}`);
+      res.status(200).json(chats);
     }
   }
 );
@@ -179,18 +179,12 @@ export const newChat = expressAsyncHandler(
     const oldChat2 = await getChat(chatId2);
     if (!oldChat1 && !oldChat2) {
       const newChat = await createChat(req.body.userId, req.body.friendId);
-      res
-        .status(200)
-        .json(`${JSON.stringify(newChat)}, me: ${req.body.userId} `);
+      res.status(200).json(newChat);
     } else {
       if (oldChat1) {
-        res
-          .status(200)
-          .json(`${JSON.stringify(oldChat1)}, me: ${req.body.userId} `);
+        res.status(200).json(oldChat1);
       } else {
-        res
-          .status(200)
-          .json(`${JSON.stringify(oldChat2)}, me: ${req.body.userId} `);
+        res.status(200).json(oldChat2);
       }
     }
   }
