@@ -62,9 +62,7 @@ export const findFriends = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log('finding friends....');
     const friends = await getFriendsList(req.params.id);
-    if (friends.length === 0) {
-      res.status(200).json({ message: 'user has no friends' });
-    } else res.status(200).json(`${JSON.stringify(friends)}`);
+    res.status(200).json(`${JSON.stringify(friends)}`);
   }
 );
 
@@ -102,11 +100,8 @@ export const sendFriendRequest = expressAsyncHandler(
 export const viewFriendRequests = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const requests = await getFriendRequests(req.params.id);
-    if (requests.length === 0) {
-      res.status(200).json({ message: 'user has no requests' });
-    } else {
-      res.status(200).json(JSON.stringify(requests));
-    }
+
+    res.status(200).json(JSON.stringify(requests));
   }
 );
 
@@ -151,9 +146,6 @@ export const viewMyChats = expressAsyncHandler(
     const chats = await getChats(userId);
     if (!chats) {
       res.status(500).json({ message: `req.params.id = ${req.params.id}` });
-    }
-    if (chats.length === 0) {
-      res.status(200).json({ message: 'user has no chats' });
     } else {
       res.status(200).json(chats);
     }
