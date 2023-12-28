@@ -179,8 +179,26 @@ export const getChat = async (chatId: string) => {
       message: {
         orderBy: [desc(Message.timestamp)],
       },
-      user1: true,
-      user2: true,
+      user1: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
+      user2: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
     },
   });
   return chat;
