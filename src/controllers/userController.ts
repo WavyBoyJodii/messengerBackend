@@ -112,7 +112,7 @@ export const viewFriendRequests = expressAsyncHandler(
 
 export const acceptFriendRequest = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const friendId = Number(req.body.requestedUser);
+    const friendId = Number(req.body.friendId);
     const myId = Number(req.body.userId);
     const newFriend = await acceptFriend(myId, friendId);
     if (newFriend.length === 0) {
