@@ -63,7 +63,7 @@ export const findFriends = expressAsyncHandler(
     console.log('finding friends....');
     const friends = await getFriendsList(req.params.id);
     if (friends.length === 0) {
-      res.status(200).json({ message: 'user has no friends' });
+      res.status(404).json({ message: 'user has no friends' });
     } else res.status(200).json(`${JSON.stringify(friends)}`);
   }
 );
