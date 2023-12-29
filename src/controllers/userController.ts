@@ -210,12 +210,12 @@ export const sendMessage = expressAsyncHandler(
     const message = await createMessage({
       body: req.body.message,
       chat_id: req.body.chatId,
-      user_id: req.user.id,
+      user_id: req.body.userId,
     });
     if (!message) {
       res.status(500).json({ message: 'the message was not sent' });
     } else {
-      res.status(200).json(JSON.stringify(message));
+      res.status(200).json(message);
     }
   }
 );
