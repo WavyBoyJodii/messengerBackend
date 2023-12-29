@@ -60,7 +60,7 @@ export const Message = pgTable('message', {
   user_id: integer('user_id')
     .notNull()
     .references(() => User.id),
-  chat_id: integer('chat_id')
+  chat_id: varchar('chat_id')
     .notNull()
     .references(() => Chat.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 });
