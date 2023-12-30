@@ -17,6 +17,7 @@ import {
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
+import { pusher } from 'lib/pusher';
 
 export const provideUser = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -215,6 +216,7 @@ export const sendMessage = expressAsyncHandler(
     if (!message) {
       res.status(500).json({ message: 'the message was not sent' });
     } else {
+      pusher.trigger(`messages-${req.body.chatId}`, 'new-message', { message });
       res.status(200).json(message);
     }
   }
