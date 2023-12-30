@@ -17,7 +17,7 @@ import {
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { pusher } from 'lib/pusher';
+import { pusher } from '../lib/pusher';
 
 export const provideUser = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
