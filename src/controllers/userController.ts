@@ -216,7 +216,9 @@ export const sendMessage = expressAsyncHandler(
     if (!message) {
       res.status(500).json({ message: 'the message was not sent' });
     } else {
-      pusher.trigger(`messages-${req.body.chatId}`, 'new-message', { message });
+      pusher.trigger(`messages-${req.body.chatId}`, 'new-message', {
+        message: message[0],
+      });
       res.status(200).json(message);
     }
   }
