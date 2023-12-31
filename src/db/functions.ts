@@ -105,10 +105,7 @@ export const getFriendsList = async (id: string) => {
 export const getFriendRequests = async (id: string) => {
   const idNumber = Number(id);
   const result = await db.query.Friends.findMany({
-    where: or(
-      and(eq(Friends.user_id1, idNumber), eq(Friends.status, 'pending')),
-      and(eq(Friends.user_id2, idNumber), eq(Friends.status, 'pending'))
-    ),
+    where: and(eq(Friends.user_id2, idNumber), eq(Friends.status, 'pending')),
     with: {
       friend: {
         columns: {
