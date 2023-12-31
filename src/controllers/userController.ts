@@ -84,7 +84,6 @@ export const sendFriendRequest = expressAsyncHandler(
           message: 'there was an error processing this friend request',
         });
       } else {
-        pusher.trigger(`requests-${req.body.userId}`, 'new-request', {});
         res
           .status(200)
           .json({ message: `friend request sent to ${user.username}` });
@@ -116,7 +115,6 @@ export const acceptFriendRequest = expressAsyncHandler(
       res.status(200).json({ message: 'This user has not requested you' });
     } else {
       const friend = await getUserById(friendId);
-      pusher.trigger(`requests-${req.body.userId}`, 'new-request', {});
       res
         .status(200)
         .json({ message: `you have accepted ${friend.username}'s request` });
@@ -136,7 +134,6 @@ export const removeFriend = expressAsyncHandler(
         .json({ message: 'There is no relationship to this user' });
     } else {
       const deletedFriend = await getUserById(friendId);
-      pusher.trigger(`requests-${myId}`, 'new-request', {});
       res.status(200).json({
         message: `you have denied ${deletedFriend.username}'s friend request`,
       });
