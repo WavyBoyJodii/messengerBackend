@@ -172,12 +172,12 @@ export const newChat = expressAsyncHandler(
     const oldChat2 = await getChat(chatId2);
     if (!oldChat1 && !oldChat2) {
       const newChat = await createChat(req.body.userId, req.body.friendId);
-      res.status(200).json(newChat);
+      res.status(200).json({ chat: newChat[0] });
     } else {
       if (oldChat1) {
-        res.status(200).json(oldChat1);
+        res.status(200).json({ chat: oldChat1 });
       } else {
-        res.status(200).json(oldChat2);
+        res.status(200).json({ chat: oldChat2 });
       }
     }
   }
