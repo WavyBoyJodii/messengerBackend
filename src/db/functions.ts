@@ -50,6 +50,16 @@ export const checkFriendship = async (myId: number, friendId: number) => {
         eq(Friends.user_id1, friendId),
         eq(Friends.user_id2, myId),
         eq(Friends.status, 'accepted')
+      ),
+      and(
+        eq(Friends.user_id1, myId),
+        eq(Friends.user_id2, friendId),
+        eq(Friends.status, 'pending')
+      ),
+      and(
+        eq(Friends.user_id1, friendId),
+        eq(Friends.user_id2, myId),
+        eq(Friends.status, 'pending')
       )
     ),
     with: {
