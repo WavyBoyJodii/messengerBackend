@@ -14,6 +14,7 @@ import {
   getChats,
   getChat,
   createMessage,
+  getChatById,
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
@@ -227,6 +228,23 @@ export const sendMessage = expressAsyncHandler(
     if (!message) {
       res.status(500).json({ message: 'the message was not sent' });
     } else {
+      const chat = await getChatById(req.body.chatId);
+      const userChats = await getChats(req.body.userId);
+      const friendChats =
+        chat.user_id1 === req.body.userId
+          ? await getChats(chat.user_id2)
+          : await getChats(chat.user_id1);
+
+      const friendId =
+        chat.user_id1 === req.body.userId ? chat.user_id2 : chat.user_id1;
+
+      pusher.trigger(`messages-${chat.id}-${req.body.userId}`, 'mychats', {
+        chats: userChats,
+      });
+      pusher.trigger(`messages-${chat.id}-${friendId}`, 'mychats', {
+        chats: friendChats,
+      });
+
       pusher.trigger(`messages-${req.body.chatId}`, 'new-message', {
         message: message[0],
       });
