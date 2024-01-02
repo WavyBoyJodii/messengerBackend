@@ -175,9 +175,13 @@ export const newChat = expressAsyncHandler(
     const oldChat2 = await getChat(chatId2);
     if (!oldChat1 && !oldChat2) {
       const newChat = await createChat(req.body.userId, req.body.friendId);
-      const chats = await getChats(req.body.userId);
+      const userChats = await getChats(req.body.userId);
+      const friendChats = await getChats(req.body.friendId);
       pusher.trigger(`chats-${req.body.userId}`, 'mychats', {
-        chats,
+        chats: userChats,
+      });
+      pusher.trigger(`chats-${req.body.friendId}`, 'mychats', {
+        chats: friendChats,
       });
       res.status(200).json({ chat: newChat[0] });
     } else {
