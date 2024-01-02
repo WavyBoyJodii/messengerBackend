@@ -175,7 +175,6 @@ export const getChats = async (myId: number) => {
       user1: true,
       user2: true,
     },
-    orderBy: [desc(Message.chat_id)],
   });
   return chats;
 };
