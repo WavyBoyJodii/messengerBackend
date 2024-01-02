@@ -211,6 +211,38 @@ export const getChat = async (chatId: string) => {
   return chat;
 };
 
+export const getChatById = async (chatId: number) => {
+  const chat = await db.query.Chat.findFirst({
+    where: eq(Chat.id, chatId),
+    with: {
+      message: {
+        orderBy: [desc(Message.timestamp)],
+      },
+      user1: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
+      user2: {
+        columns: {
+          email: true,
+          first_name: true,
+          last_name: true,
+          id: true,
+          username: true,
+          profile_photo: true,
+        },
+      },
+    },
+  });
+  return chat;
+};
+
 export const createChat = async (myId: number, friendId: number) => {
   const result = await db
     .insert(Chat)
