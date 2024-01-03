@@ -150,7 +150,7 @@ export const viewMyChats = expressAsyncHandler(
       res.status(500).json({ message: `req.params.id = ${req.params.id}` });
     } else {
       pusher.trigger(`chats-${req.params.id}`, 'mychats', {
-        chats,
+        chats: JSON.stringify(chats),
       });
       res.status(200).json(chats);
     }
@@ -179,10 +179,10 @@ export const newChat = expressAsyncHandler(
       const userChats = await getChats(req.body.userId);
       const friendChats = await getChats(req.body.friendId);
       pusher.trigger(`chats-${req.body.userId}`, 'mychats', {
-        chats: userChats,
+        chats: JSON.stringify(userChats),
       });
       pusher.trigger(`chats-${req.body.friendId}`, 'mychats', {
-        chats: friendChats,
+        chats: JSON.stringify(friendChats),
       });
       res.status(200).json({ chat: newChat[0] });
     } else {
@@ -246,7 +246,7 @@ export const sendMessage = expressAsyncHandler(
       // });
 
       pusher.trigger(`messages-${req.body.chatId}`, 'new-message', {
-        message: message[0],
+        message: JSON.stringify(message[0]),
       });
       res.status(200).json(message);
     }
