@@ -238,12 +238,12 @@ export const sendMessage = expressAsyncHandler(
       const friendId =
         chat.user_id1 === req.body.userId ? chat.user_id2 : chat.user_id1;
 
-      pusher.trigger(`messages-${chat.id}-${req.body.userId}`, 'mychats', {
-        chats: JSON.stringify(userChats),
-      });
-      pusher.trigger(`messages-${chat.id}-${friendId}`, 'mychats', {
-        chats: JSON.stringify(friendChats),
-      });
+      // pusher.trigger(`messages-${chat.id}-${req.body.userId}`, 'mychats', {
+      //   chats: JSON.stringify(userChats),
+      // });
+      // pusher.trigger(`messages-${chat.id}-${friendId}`, 'mychats', {
+      //   chats: JSON.stringify(friendChats),
+      // });
 
       pusher.trigger(`messages-${req.body.chatId}`, 'new-message', {
         message: message[0],
