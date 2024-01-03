@@ -230,7 +230,9 @@ export const sendMessage = expressAsyncHandler(
     } else {
       const chat = await getChatById(req.body.chatId);
       const friendId =
-        chat.user_id1 === req.body.userId ? chat.user_id2 : chat.user_id1;
+        chat.user_id1 === Number(req.body.userId)
+          ? chat.user_id2
+          : chat.user_id1;
 
       pusher.trigger(`messages-${chat.id}-${req.body.userId}`, 'mychats', {
         chat: JSON.stringify(chat),
