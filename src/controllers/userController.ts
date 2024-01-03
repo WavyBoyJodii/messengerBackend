@@ -149,9 +149,9 @@ export const viewMyChats = expressAsyncHandler(
     if (!chats) {
       res.status(500).json({ message: `req.params.id = ${req.params.id}` });
     } else {
-      pusher.trigger(`chats-${req.params.id}`, 'mychats', {
-        chats: JSON.stringify(chats),
-      });
+      // pusher.trigger(`chats-${req.params.id}`, 'mychats', {
+      //   chats: JSON.stringify(chats),
+      // });
       res.status(200).json(chats);
     }
   }
