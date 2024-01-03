@@ -179,10 +179,10 @@ export const newChat = expressAsyncHandler(
       const userChats = await getChats(req.body.userId);
       const friendChats = await getChats(req.body.friendId);
       pusher.trigger(`chats-${req.body.userId}`, 'mychats', {
-        chats: JSON.stringify(userChats),
+        chat: JSON.stringify(newChat[0]),
       });
       pusher.trigger(`chats-${req.body.friendId}`, 'mychats', {
-        chats: JSON.stringify(friendChats),
+        chat: JSON.stringify(newChat[0]),
       });
       res.status(200).json({ chat: newChat[0] });
     } else {
@@ -229,20 +229,14 @@ export const sendMessage = expressAsyncHandler(
       res.status(500).json({ message: 'the message was not sent' });
     } else {
       const chat = await getChatById(req.body.chatId);
-      const userChats = await getChats(req.body.userId);
-      const friendChats =
-        chat.user_id1 === req.body.userId
-          ? await getChats(chat.user_id2)
-          : await getChats(chat.user_id1);
-
       const friendId =
         chat.user_id1 === req.body.userId ? chat.user_id2 : chat.user_id1;
 
       pusher.trigger(`messages-${chat.id}-${req.body.userId}`, 'mychats', {
-        chats: JSON.stringify(userChats),
+        chat: JSON.stringify(chat),
       });
       pusher.trigger(`messages-${chat.id}-${friendId}`, 'mychats', {
-        chats: JSON.stringify(friendChats),
+        chat: JSON.stringify(chat),
       });
 
       pusher.trigger(`messages-${req.body.chatId}`, 'new-message', {
