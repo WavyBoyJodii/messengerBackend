@@ -252,7 +252,9 @@ export const sendMessage = expressAsyncHandler(
 
 export const aiChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(`logging messages in aichat req body ${req.body.message}`);
+    console.log(
+      `logging messages in aichat req body ${JSON.stringify(req.body.message)}`
+    );
     const chatCompletion = await openai.chat.completions.create({
       messages: req.body.message,
       model: 'gpt-3.5-turbo',
