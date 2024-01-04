@@ -1,7 +1,12 @@
 import express from 'express';
 import * as userController from '../controllers/userController';
 import { verifyJwtToken } from '../middleware/verifyJwt';
-import { acceptRequest, friendRequest, messageVal } from '../lib/validations';
+import {
+  acceptRequest,
+  aiValidator,
+  friendRequest,
+  messageVal,
+} from '../lib/validations';
 import { validateCheck } from '../middleware/validateCheck';
 const router = express.Router();
 
@@ -81,5 +86,13 @@ router.post(
   validateCheck,
   verifyJwtToken,
   userController.sendMessage
+);
+
+router.post(
+  '/ai',
+  aiValidator,
+  validateCheck,
+  verifyJwtToken,
+  userController.aiChat
 );
 export default router;

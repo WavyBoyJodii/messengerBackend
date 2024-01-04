@@ -67,3 +67,11 @@ export const messageVal = [
     .escape()
     .withMessage('input must be a number'),
 ];
+
+export const aiValidator = [
+  body('message')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('message must have a value'),
+];

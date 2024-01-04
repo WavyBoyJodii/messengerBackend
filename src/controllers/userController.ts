@@ -19,6 +19,7 @@ import {
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import { pusher } from '../lib/pusher';
+import { openai } from 'lib/openAi';
 
 export const provideUser = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -246,5 +247,15 @@ export const sendMessage = expressAsyncHandler(
       });
       res.status(200).json(message);
     }
+  }
+);
+
+export const aiChat = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: req.body.message }],
+      model: 'gpt-3.5-turbo',
+    });
+    res.status(200).json(chatCompletion.choices[0].message);
   }
 );
