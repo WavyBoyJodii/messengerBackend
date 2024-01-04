@@ -253,7 +253,7 @@ export const sendMessage = expressAsyncHandler(
 export const aiChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: 'user', content: req.body.message }],
+      messages: req.body.message,
       model: 'gpt-3.5-turbo',
     });
     res.status(200).json(chatCompletion.choices[0].message);
