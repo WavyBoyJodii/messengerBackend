@@ -19,7 +19,7 @@ import {
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import { pusher } from '../lib/pusher';
-import { openai } from 'lib/openAi';
+import { openai } from '../lib/openAi';
 
 export const provideUser = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
