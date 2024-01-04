@@ -71,7 +71,7 @@ export const messageVal = [
 export const aiValidator = [
   body('message')
     .trim()
-    .isArray({ min: 1 })
+    .isLength({ min: 1 })
     .escape()
     .withMessage('message must be an array'),
 ];
