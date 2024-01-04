@@ -88,11 +88,5 @@ router.post(
   userController.sendMessage
 );
 
-router.post(
-  '/ai',
-  aiValidator,
-  validateCheck,
-  verifyJwtToken,
-  userController.aiChat
-);
+router.post('/ai', verifyJwtToken, userController.aiChat);
 export default router;
