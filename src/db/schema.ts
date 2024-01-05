@@ -17,6 +17,9 @@ export const friendStatusEnum = pgEnum('status', [
   'accepted',
   'rejected',
 ]);
+
+export const AiMessageRoleEnum = pgEnum('role', ['user', 'assistant']);
+
 export const User = pgTable(
   'user',
   {
@@ -87,6 +90,21 @@ export const Friends = pgTable(
 );
 export type NewFriendsType = typeof Friends.$inferInsert;
 
+export const AiChat = pgTable('aiChat', {
+  id: serial('id').primaryKey(),
+});
+
+export type NewAiChat = typeof AiChat.$inferInsert;
+
+export const AiMessage = pgTable('aiMessage', {
+  id: serial('id').primaryKey(),
+  role: AiMessageRoleEnum('role').notNull(),
+  content: text('content').notNull(),
+  ai_chat_id: integer('ai_chat_id')
+    .notNull()
+    .references(() => AiChat.id),
+});
+
 // export const UserChat = pgTable(
 //   'user_chat',
 //   {
@@ -114,6 +132,13 @@ export const messageRelations = relations(Message, ({ one }) => ({
   chat: one(Chat, {
     fields: [Message.chat_id],
     references: [Chat.id],
+  }),
+}));
+
+export const aiMessageRelations = relations(AiMessage, ({ one }) => ({
+  aiChat: one(AiChat, {
+    fields: [AiMessage.ai_chat_id],
+    references: [AiChat.id],
   }),
 }));
 
