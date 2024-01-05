@@ -262,9 +262,10 @@ export const aiChat = expressAsyncHandler(
       `logging mychatmessage in aichat ${JSON.stringify(myChatMessage)}`
     );
     const aiChatId = Number(req.body.aichatid);
+    console.log(`logging aiChatID ${aiChatId}`);
     const newAiMessage = await createAiMessage({
-      role: myChatMessage[0].role,
-      content: myChatMessage[0].content,
+      role: myChatMessage[-1].role,
+      content: myChatMessage[-1].content,
       ai_chat_id: aiChatId,
     });
     const chatCompletion = await openai.chat.completions.create({
