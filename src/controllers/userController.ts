@@ -281,6 +281,6 @@ export const aiChat = expressAsyncHandler(
 export const createNewAiChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const chat = await createAiChat();
-    res.status(200).json(chat);
+    res.status(200).json(chat[0]);
   }
 );
