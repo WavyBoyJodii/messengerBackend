@@ -88,7 +88,9 @@ router.post(
   userController.sendMessage
 );
 
-router.get('ai/new', verifyJwtToken, userController.createNewAiChat);
+// GET route for creating a new Ai Chat
+router.get('/ai/new', verifyJwtToken, userController.createNewAiChat);
 
+// POST route for creating a new message in ai Chat and sending message to openAi
 router.post('/ai', verifyJwtToken, userController.aiChat);
 export default router;
