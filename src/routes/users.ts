@@ -88,5 +88,7 @@ router.post(
   userController.sendMessage
 );
 
+router.get('ai/new', verifyJwtToken, userController.createNewAiChat);
+
 router.post('/ai', verifyJwtToken, userController.aiChat);
 export default router;

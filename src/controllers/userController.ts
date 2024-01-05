@@ -15,6 +15,7 @@ import {
   getChat,
   createMessage,
   getChatById,
+  createAiChat,
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
@@ -260,5 +261,12 @@ export const aiChat = expressAsyncHandler(
       model: 'gpt-3.5-turbo',
     });
     res.status(200).json(chatCompletion.choices[0].message);
+  }
+);
+
+export const createNewAiChat = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chat = await createAiChat();
+    res.status(200).json(chat);
   }
 );
