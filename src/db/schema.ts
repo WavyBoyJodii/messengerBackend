@@ -105,6 +105,7 @@ export const AiMessage = pgTable('aiMessage', {
     .references(() => AiChat.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 });
 
+export type AiMessageType = typeof AiMessage.$inferSelect;
 export type NewAiMessage = typeof AiMessage.$inferInsert;
 
 // export const UserChat = pgTable(

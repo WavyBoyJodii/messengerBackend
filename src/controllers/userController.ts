@@ -1,5 +1,5 @@
 import { db } from '../db/db';
-import { User } from '../db/schema';
+import { AiMessageType, User } from '../db/schema';
 import {
   addFriend,
   getFriendsList,
@@ -257,12 +257,14 @@ export const aiChat = expressAsyncHandler(
     console.log(
       `logging messages in aichat req body ${JSON.stringify(req.body.message)}`
     );
-    const { role, content } = JSON.parse(req.body.message);
-    console.log(`logging role in aichat req body ${JSON.stringify(role)}`);
+    const myChatMessage: AiMessageType[] = await JSON.parse(req.body.message);
+    console.log(
+      `logging mychatmessage in aichat ${JSON.stringify(myChatMessage)}`
+    );
     const aiChatId = Number(req.body.aichatid);
     const newAiMessage = await createAiMessage({
-      role,
-      content,
+      role: myChatMessage[0].role,
+      content: myChatMessage[0].content,
       ai_chat_id: aiChatId,
     });
     const chatCompletion = await openai.chat.completions.create({
