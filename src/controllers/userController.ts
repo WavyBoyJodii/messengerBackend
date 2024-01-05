@@ -16,6 +16,7 @@ import {
   createMessage,
   getChatById,
   createAiChat,
+  createAiMessage,
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
@@ -256,9 +257,22 @@ export const aiChat = expressAsyncHandler(
     console.log(
       `logging messages in aichat req body ${JSON.stringify(req.body.message)}`
     );
+    const { role, content } = JSON.parse(req.body.message);
+    console.log(`logging role in aichat req body ${JSON.stringify(role)}`);
+    const aiChatId = Number(req.body.aichatid);
+    const newAiMessage = await createAiMessage({
+      role,
+      content,
+      ai_chat_id: aiChatId,
+    });
     const chatCompletion = await openai.chat.completions.create({
       messages: JSON.parse(req.body.message),
       model: 'gpt-3.5-turbo',
+    });
+    const newChatGptAiMessage = await createAiMessage({
+      role: chatCompletion.choices[0].message.role,
+      content: chatCompletion.choices[0].message.content,
+      ai_chat_id: aiChatId,
     });
     res.status(200).json(chatCompletion.choices[0].message);
   }
