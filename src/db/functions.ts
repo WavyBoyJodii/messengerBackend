@@ -304,7 +304,13 @@ export const getAiChat = async (id: number) => {
   const chat = await db.query.AiChat.findFirst({
     where: eq(AiChat.id, id),
     with: {
-      aiMessage: true,
+      aiMessage: {
+        columns: {
+          role: true,
+          content: true,
+        },
+      },
     },
   });
+  return chat;
 };
