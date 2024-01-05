@@ -6,6 +6,10 @@ import {
   NewFriendsType,
   NewMessageType,
   NewUserType,
+  NewAiChat,
+  AiChat,
+  NewAiMessage,
+  AiMessage,
 } from './schema';
 import { eq, and, relations, or, desc } from 'drizzle-orm';
 import { db } from './db';
@@ -284,4 +288,23 @@ export const deleteChat = async (myId: number, friendId: number) => {
 export const createMessage = async (newMessage: NewMessageType) => {
   const message = await db.insert(Message).values(newMessage).returning();
   return message;
+};
+
+export const createAiChat = async () => {
+  const chat = await db.insert(AiChat).values({}).returning();
+  return chat;
+};
+
+export const createAiMessage = async (newAiMessage: NewAiMessage) => {
+  const aiMessage = await db.insert(AiMessage).values(newAiMessage).returning();
+  return aiMessage;
+};
+
+export const getAiChat = async (id: number) => {
+  const chat = await db.query.AiChat.findFirst({
+    where: eq(AiChat.id, id),
+    with: {
+      aiMessage: true,
+    },
+  });
 };

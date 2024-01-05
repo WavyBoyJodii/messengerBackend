@@ -102,8 +102,10 @@ export const AiMessage = pgTable('aiMessage', {
   content: text('content').notNull(),
   ai_chat_id: integer('ai_chat_id')
     .notNull()
-    .references(() => AiChat.id),
+    .references(() => AiChat.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 });
+
+export type NewAiMessage = typeof AiMessage.$inferInsert;
 
 // export const UserChat = pgTable(
 //   'user_chat',
@@ -140,6 +142,10 @@ export const aiMessageRelations = relations(AiMessage, ({ one }) => ({
     fields: [AiMessage.ai_chat_id],
     references: [AiChat.id],
   }),
+}));
+
+export const aiChatRelations = relations(AiChat, ({ many }) => ({
+  aiMessage: many(AiMessage),
 }));
 
 export const friendRelations = relations(Friends, ({ one }) => ({
