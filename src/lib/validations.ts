@@ -75,3 +75,12 @@ export const aiValidator = [
     .escape()
     .withMessage('message must be an array'),
 ];
+
+export const newAiChatVal = [
+  body('userId')
+    .trim()
+    .isNumeric()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('input must be a number'),
+];

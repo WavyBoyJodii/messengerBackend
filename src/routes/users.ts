@@ -6,6 +6,7 @@ import {
   aiValidator,
   friendRequest,
   messageVal,
+  newAiChatVal,
 } from '../lib/validations';
 import { validateCheck } from '../middleware/validateCheck';
 const router = express.Router();
@@ -88,13 +89,22 @@ router.post(
   userController.sendMessage
 );
 
-// GET route for creating a new Ai Chat
-router.get('/ai/new', verifyJwtToken, userController.createNewAiChat);
+// POST route for creating a new Ai Chat
+router.post(
+  '/ai/new',
+  newAiChatVal,
+  validateCheck,
+  verifyJwtToken,
+  userController.createNewAiChat
+);
 
 // POST route for creating a new message in ai Chat and sending message to openAi
 router.post('/ai', verifyJwtToken, userController.aiChat);
 
-//
+// GET route for getting one Ai chat
 router.get('/ai/chat/:id', verifyJwtToken, userController.getMyAiChat);
+
+//GET route for retrieving all of a users Ai Chats
+router.get('/ai/chats/:id', verifyJwtToken, userController.getMyAiChats);
 
 export default router;
