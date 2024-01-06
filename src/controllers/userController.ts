@@ -301,8 +301,12 @@ export const getMyAiChat = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const aiChatId = Number(req.params.id);
     const chat = await getAiChat(aiChatId);
-
-    res.status(200).json(chat);
+    const keys = Object.keys(chat);
+    if (keys.length === 0) {
+      res.status(404);
+    } else {
+      res.status(200).json(chat);
+    }
   }
 );
 
