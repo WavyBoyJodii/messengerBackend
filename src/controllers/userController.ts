@@ -281,7 +281,7 @@ export const aiChat = expressAsyncHandler(
       ai_chat_id: aiChatId,
     });
     const aiChat = await getAiChat(aiChatId);
-    pusher.trigger(`aichats-${myId}`, 'my_Ai_Chats', {
+    pusher.trigger(`aichats-${myId}`, 'aichats', {
       chat: JSON.stringify(aiChat),
     });
     res.status(200).json(chatCompletion.choices[0].message);
