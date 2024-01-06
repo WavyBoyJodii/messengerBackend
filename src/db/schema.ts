@@ -92,6 +92,9 @@ export type NewFriendsType = typeof Friends.$inferInsert;
 
 export const AiChat = pgTable('aiChat', {
   id: serial('id').primaryKey(),
+  user: integer('user')
+    .notNull()
+    .references(() => User.id),
 });
 
 export type NewAiChat = typeof AiChat.$inferInsert;
@@ -125,6 +128,7 @@ export const userRelations = relations(User, ({ many }) => ({
   message: many(Message),
   chat: many(Chat),
   friends: many(Friends),
+  aiChat: many(AiChat),
 }));
 
 export const messageRelations = relations(Message, ({ one }) => ({
@@ -145,8 +149,9 @@ export const aiMessageRelations = relations(AiMessage, ({ one }) => ({
   }),
 }));
 
-export const aiChatRelations = relations(AiChat, ({ many }) => ({
+export const aiChatRelations = relations(AiChat, ({ many, one }) => ({
   aiMessage: many(AiMessage),
+  user: one(User),
 }));
 
 export const friendRelations = relations(Friends, ({ one }) => ({
