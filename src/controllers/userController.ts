@@ -263,6 +263,7 @@ export const aiChat = expressAsyncHandler(
     console.log(
       `logging mychatmessage in aichat ${JSON.stringify(myChatMessage)}`
     );
+    const myId = Number(req.body.myId);
     const aiChatId = Number(req.body.aichatid);
     console.log(`logging aiChatID ${aiChatId}`);
     const newAiMessage = await createAiMessage({
@@ -280,7 +281,7 @@ export const aiChat = expressAsyncHandler(
       ai_chat_id: aiChatId,
     });
     const aiChat = await getAiChat(aiChatId);
-    pusher.trigger(`aichats-${req.body.myId}`, 'myAiChats', {
+    pusher.trigger(`aichats-${myId}`, 'my_Ai_Chats', {
       chat: JSON.stringify(aiChat),
     });
     res.status(200).json(chatCompletion.choices[0].message);
