@@ -329,3 +329,11 @@ export const getAiChats = async (userId: number) => {
   });
   return chats;
 };
+
+export const deleteAiChat = async (chatId: number) => {
+  const result = await db
+    .delete(AiChat)
+    .where(eq(AiChat.id, chatId))
+    .returning();
+  return result;
+};

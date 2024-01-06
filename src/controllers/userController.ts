@@ -19,6 +19,7 @@ import {
   createAiMessage,
   getAiChat,
   getAiChats,
+  deleteAiChat,
 } from '../db/functions';
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
@@ -311,5 +312,14 @@ export const getMyAiChats = expressAsyncHandler(
     const chats = await getAiChats(userId);
 
     res.status(200).json(chats);
+  }
+);
+
+export const deleteMyAiChat = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const chatId = Number(req.params.id);
+    const deletedAiChat = await deleteAiChat(chatId);
+
+    res.status(200).json(deletedAiChat);
   }
 );

@@ -104,6 +104,9 @@ router.post('/ai', verifyJwtToken, userController.aiChat);
 // GET route for getting one Ai chat
 router.get('/ai/chat/:id', verifyJwtToken, userController.getMyAiChat);
 
+//DELETE route for deleting ai chats
+router.delete('/ai/chat/:id', verifyJwtToken, userController.deleteMyAiChat);
+
 //GET route for retrieving all of a users Ai Chats
 router.get('/ai/chats/:id', verifyJwtToken, userController.getMyAiChats);
 
