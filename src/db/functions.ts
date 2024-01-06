@@ -290,8 +290,8 @@ export const createMessage = async (newMessage: NewMessageType) => {
   return message;
 };
 
-export const createAiChat = async () => {
-  const chat = await db.insert(AiChat).values({}).returning();
+export const createAiChat = async (userId: number) => {
+  const chat = await db.insert(AiChat).values({ user: userId }).returning();
   return chat;
 };
 
@@ -313,4 +313,19 @@ export const getAiChat = async (id: number) => {
     },
   });
   return chat;
+};
+
+export const getAiChats = async (userId: number) => {
+  const chats = await db.query.AiChat.findMany({
+    where: eq(AiChat.user, userId),
+    with: {
+      aiMessage: {
+        columns: {
+          role: true,
+          content: true,
+        },
+      },
+    },
+  });
+  return chats;
 };
