@@ -184,12 +184,12 @@ export const newChat = expressAsyncHandler(
       const newChat = await createChat(req.body.userId, req.body.friendId);
       const userChats = await getChats(req.body.userId);
       const friendChats = await getChats(req.body.friendId);
-      pusher.trigger(`chats-${req.body.userId}`, 'mychats', {
-        chat: JSON.stringify(newChat[0]),
-      });
-      pusher.trigger(`chats-${req.body.friendId}`, 'mychats', {
-        chat: JSON.stringify(newChat[0]),
-      });
+      // pusher.trigger(`chats-${req.body.userId}`, 'mychats', {
+      //   chat: JSON.stringify(newChat[0]),
+      // });
+      // pusher.trigger(`chats-${req.body.friendId}`, 'mychats', {
+      //   chat: JSON.stringify(newChat[0]),
+      // });
       res.status(200).json({ chat: newChat[0] });
     } else {
       if (oldChat1) {
