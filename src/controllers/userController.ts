@@ -264,9 +264,9 @@ export const aiChat = expressAsyncHandler(
     console.log(
       `logging mychatmessage in aichat ${JSON.stringify(myChatMessage)}`
     );
-    const myId = Number(req.body.myId);
+    const myId = req.body.myId;
     const aiChatId = Number(req.body.aichatid);
-    console.log(`logging aiChatID ${aiChatId}`);
+    console.log(`logging myId ${myId}`);
     const newAiMessage = await createAiMessage({
       role: myChatMessage[myChatMessage.length - 1].role,
       content: myChatMessage[myChatMessage.length - 1].content,
